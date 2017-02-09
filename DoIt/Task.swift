@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+//tworzymy classe Task
+class Task {
+    var name = ""
+    var important: Bool = false
+    
+    
+}

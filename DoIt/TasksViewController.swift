@@ -1,20 +1,22 @@
 //
-//  ViewController.swift
+//  TasksViewController.swift
 //
 //aby w 2 widoku ( po przejsciu plusTapped) nie wyswietlała się ikona < Do It a zamiast tego  < Wróc zmieniamy jej back button w opcjach
 
-
+    // 2 Bledy sa bo odjebalem z main.storyboard - usunalem cos potem dodalem na chama, ale dziala
 
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TasksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     //podpinamy tabble View z pierszego widoku (tego)
     @IBOutlet weak var tableView: UITableView!
     
     // tworzymy pusta tablice typu Task
     var tasks : [Task] = []
+    //index przycisnietego zadania aby potem je wywalic z tablicy
+    var selectedIndex = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +57,13 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         return cell
     }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let task = tasks[indexPath.row]
+        selectedIndex = indexPath.row
+        performSegue(withIdentifier: "selectTaskSegue", sender: task)
+    }
+    
+    
     
     //funckja tworząca 3 zadania na podstawie klasy Task
     func makeTasks() -> [Task] {
@@ -75,14 +84,27 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func plusTapped(_ sender: Any) {
+        
         //nil bo nic nie przesyłamy, addSegue bo tak nazwalismy przejscie do nowego  widoku
         performSegue(withIdentifier: "addSegue", sender: nil)
     }
     
+    //funkcja do odpierania zadan z createTaskViewControlera
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        //if zeby bylo wiadomo ktorego segue uzyc bo sa 2 na tym widoku
+        if segue.identifier == "addSegue"{
+        
+        let nextVC = segue.destination as! CreateTaskViewController
+        nextVC.previousVC = self
+        }
+        if segue.identifier == "selectTaskSegue"{
+            let nextVC = segue.destination as! CompleteTaskViewController
+            nextVC.task = sender as! Task
+            nextVC.previousVC = self
+    }
     
     
-    
-    
+    }
     
     /*   komentujemy bo można usunąć, bo ta funckja wykona się wtedy tylko gdy skończy się pamięć w telefonie a przy prostych aplikacjach nie ma to sensu
      

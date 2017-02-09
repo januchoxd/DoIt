@@ -10,10 +10,35 @@ import UIKit
 
 class CompleteTaskViewController: UIViewController {
 
+    
+    var task = Task()
+    var previousVC = TasksViewController()
+    
+    @IBOutlet weak var CompleteLabel: UILabel!
+    
+    @IBAction func CompleteButton(_ sender: Any) {
+        //usuwamy zadanie
+        previousVC.tasks.remove(at: previousVC.selectedIndex)
+        
+        previousVC.tableView.reloadData()
+
+        navigationController!.popViewController(animated: true)
+        
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        if task.important {
+            
+           CompleteLabel.text =  "❗️\(task.name)"
+        }else {
+            
+            CompleteLabel.text =  task.name
+        }
+
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -22,14 +47,6 @@ class CompleteTaskViewController: UIViewController {
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
+  
 
 }
